@@ -1,0 +1,16 @@
+header {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+header a {
+    color: white;
+    font-family: monospace;
+    font-size: 16px;
+    padding: 12px;
+    text-decoration: none;
+}
+
+header a:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
