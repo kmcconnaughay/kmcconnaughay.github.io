@@ -1,0 +1,13 @@
+.large-round-icon {
+    width: 100px;
+    height: 100px;
+    padding: 20px;
+    border-radius: 70px;
+}
+
+#wrench {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+}

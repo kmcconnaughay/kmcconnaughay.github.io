@@ -1,9 +1,9 @@
-header {
+nav {
     display: flex;
     flex-direction: row-reverse;
 }
 
-header a {
+nav a {
     color: white;
     font-family: monospace;
     font-size: 16px;
@@ -11,6 +11,6 @@ header a {
     text-decoration: none;
 }
 
-header a:hover {
+nav a:hover {
     background-color: rgba(255, 255, 255, 0.16);
 }
