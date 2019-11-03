@@ -6,9 +6,7 @@
 
 .card {
     border-radius: 8px;
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-top: 15px;
+    margin: 15px;
     min-height: 200px;
     min-width: 200px;
     max-width: 700px;
@@ -21,9 +19,35 @@
     }
 }
 
-.white-title-text {
-    color: rgb(255, 255, 255);
+.large-text {
     font-size: 18px;
+}
+
+.medium-text {
+    font-size: 15px;
+}
+
+.small-text {
+    font-size: 12px;
+}
+
+.white-text {
+    color: rgb(230, 230, 230);
+}
+
+.title-text {
     font-family: monospace;
     text-align: center;
+}
+
+.date-text {
+    font-family: monospace;
+    text-align: center;
+}
+
+.content-text {
+    font-family: monospace;
+    margin-left: 15px;
+    margin-right: 15px;
+    text-align: justify;
 }
