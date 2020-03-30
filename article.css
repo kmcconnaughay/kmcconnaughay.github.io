@@ -11,7 +11,15 @@
     max-width: 700px;
 }
 
+.narrow-screen-only {
+    display: block;
+}
+
 @media screen and (min-width: 730px) {
+    .narrow-screen-only {
+        display: none;
+    }
+
     .card {
         margin-left: auto;
         margin-right: auto;
@@ -27,12 +35,26 @@
 }
 
 .inline-code {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(256, 165, 0);
     padding-left: 4px;
     padding-right: 4px;
     margin-left: 2px;
     margin-right: 2px;
-    background-color: rgba(18, 18, 18);
-    border-radius: 5px;
+}
+
+.code-block {
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(256, 165, 0);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 15px;
+    overflow-x: auto;
 }
 
 .large-text {
