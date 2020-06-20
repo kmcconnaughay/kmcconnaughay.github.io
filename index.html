@@ -12,7 +12,9 @@
 </head>
 <body class="dark-gray-background">
   <nav class="gray-background">
-    <a class="medium-text white-text" href="https://www.github.com/kmcconnaughay/kmcconnaughay.github.io">GitHub</a>
+    <a href="https://kmcconnaughay.github.io"><img id="logo" class="small-square-icon" src="images/logo.svg" alt=
+    "Site logo"></a> <a class="medium-text white-text" href=
+    "https://www.github.com/kmcconnaughay/kmcconnaughay.github.io">GitHub</a>
   </nav>
   <article class="gray-background teal-border card" id="decompressing-strings-interview-edition">
     <header>
@@ -231,7 +233,8 @@ def _evaluate_compression(parsed_compression: List[str]) -&gt; str:
       outputs of many invocations of the <code class="inline-code">parsec.letter</code> parser and our <code class=
       "inline-code">_block</code> parser, concatenates the strings, and returns the result.</p>
       <p>We can plug the evaluate functions into our parsers with <code class="inline-code">parsecmap</code>:</p>
-      <pre><code class="code-block">@parsec.Parser
+      <pre><code class="code-block">def _block() -&gt; parsec.Parser:
+    @parsec.Parser
     def parse(text, index) -&gt; str:
         p = (
             _number() + (

@@ -1,12 +1,13 @@
 nav {
     display: flex;
-    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
 }
 
 nav a {
     font-family: monospace;
-    padding: 12px;
     text-decoration: none;
+    margin-right: 16px;
 }
 
 nav a:hover {
