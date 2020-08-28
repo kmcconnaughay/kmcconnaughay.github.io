@@ -1,0 +1,88 @@
+@import "colors";
+@import "fonts";
+
+$tile-margin: 1rem;
+$tile-max-width: 60rem;
+
+.tile {
+    background-color: $gray;
+    border-style: solid;
+    border-width: 1px;
+    border-color: $teal;
+    margin: $tile-margin;
+    max-width: $tile-max-width;
+    min-height: 12.5rem;
+}
+
+.tile a {
+    color: $soft-white;
+}
+
+.tile a:hover {
+    background-color: $transparent-white;
+}
+
+.post-list {
+    list-style-type: none;
+}
+
+.post-title {
+    color: $soft-white;
+    font-family: monospace;
+    font-size: $large-font-size;
+    text-align: center;
+}
+
+.post-subtitle {
+    color: $soft-white;
+    font-family: monospace;
+    font-size: $small-font-size;
+    text-align: center;
+}
+
+.post-content {
+    color: $soft-white;
+    font-family: monospace;
+    font-size: $medium-font-size;
+    line-height: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    text-align: justify;
+}
+
+.narrow-screen-only {
+    display: block;
+}
+
+@media screen and (min-width: $tile-max-width + 2 * $tile-margin) {
+    .narrow-screen-only {
+        display: none;
+    }
+
+    .tile {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.inline-code {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $orange;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    margin-left: 0.125rem;
+    margin-right: 0.125rem;
+}
+
+.code-block {
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-color: $orange;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    overflow-x: auto;
+}

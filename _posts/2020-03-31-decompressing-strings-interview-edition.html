@@ -1,0 +1,277 @@
+---
+layout: post
+title: Decompressing Strings, Interview Edition
+---
+<p>My worst interview experience happened at $CURRENT_EMPLOYER in early <time datetime="2016">2016</time>. It was not the fault of my interviewer. She had been hastily summoned to my room after my original interviewer canceled and, not ten minutes after she arrived, another rather persistent woman claimed the room for a Very Important™ meeting with Key Clients™.</p>
+
+<p>Thus began a long trek through the building as we desperately sought an unoccupied room with a whiteboard. This being $CURRENT_EMPLOYER on a weekday in the middle of the afternoon, such spots were a coveted and rare commodity. My interviewer made the occassional foray into small talk as we quested, but I intuited that she felt as panicked as me and our abortive attempts at conversation eventually ceased.</p>
+
+<p>And lo, twenty minutes later and a mere ten minutes before the end of the interview we found a suitable space. I rushed to the whiteboard to recreate my first ten minutes of work while also trying to remember what exactly my interviewer had asked me to solve and wondering whether the lost time would negatively affect my hiring decision and for <i>science's</i> sake what did she ask me to do...</p>
+
+<p>I did not write anything close to a working solution in that interview, but the <i>uniqueness</i> of the experience left the problem indelibly imprinted in my psyche. Now, as I self-isolate in the midst of a global pandemic, I am bored and looking for things to do, so I finally solved it. Take that, imposter syndrome.</p>
+
+<p>The problem is to decompress strings. Given the string "a2(xy)b", write a <code class="inline-code">decompress</code> function that returns "axyxyb", i.e. duplicate the parts inside parentheses a number of times indicated by the leading number.</p>
+
+<p>Some necessary clarifications:</p>
+
+<ul>
+  <li>Multiple parenthetical blocks are allowed, e.g. "2(x)3(y)" should expand to "xxyyy".</li>
+
+  <li>Nested parenthetical blocks are allowed, e.g. "2(x3(y))" should expand to "xyyyxyyy".</li>
+
+  <li>If the input is malformed, e.g. a closing parenthesis is missing, the function should throw an exception.</li>
+</ul>
+
+<p>This is a parsing problem! And as such the first step is to define the relevant <a href="https://en.wikipedia.org/wiki/Context-free_grammar">grammar</a>, which will guide us when we implement our parser.</p>
+
+<p>A <code class="inline-code">&lt;letter&gt;</code> is a terminal symbol:</p>
+
+<div class="code-block">{% highlight text %}<letter> ::= [A-Za-z]{% endhighlight %}</div>
+
+<p>The above is given in <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">Backus-Naur Form</a> augmented with <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>. It means that the <code class="inline-code">&lt;letter&gt;</code> symbol can be exactly one of "A", "B", "C", ..., "X", "Y", "Z", "a", "b", "c", ..., "x", "y", or "z".</p>
+
+<p>A <code class="inline-code">&lt;digit&gt;</code> is also a terminal symbol:</p>
+
+<div class="code-block">{% highlight text %}<digit> ::= [0-9]{% endhighlight %}</div>
+
+<p>This means that a <code class="inline-code">&lt;digit&gt;</code> can be exactly one of 0, 1, 2, 3, 4, 5, 6, 7, 8, or 9.</p>
+
+<p>To represent numbers that have more than one digit, we need to introduce our first recursive (as opposed to terminal) symbol, <code class="inline-code">&lt;number&gt;</code>:</p>
+
+<div class="code-block">{% highlight text %}<number> :: = <digit><number> | <digit>{% endhighlight %}</div>
+
+<p class="narrow-screen-only">(If your browser window is too narrow to see the full definition, e.g. you're using a mobile phone, you can scroll the orange boxes horizontally.)</p>
+
+<p>We can use this to understand numbers with more than one digit. Here's how we might use the definition to parse 735:</p>
+
+<ol>
+  <li>Use the left definition, <code class="inline-code">&lt;digit&gt;&lt;number&gt;</code>. 7 matches the definition of <code class="inline-code">&lt;digit&gt;</code> and we try to parse 35 according to the definition of <code class="inline-code">&lt;number&gt;</code>.</li>
+
+  <li>Use the left definition again. 3 matches the definition of <code class="inline-code">&lt;digit&gt;</code> and we try to parse 5 according to the definition of <code class="inline-code">&lt;number&gt;</code>.</li>
+
+  <li>Now we only have 5. The left definition no longer applies because there are no digits that follow 5, so we apply the right definition. 5 matches the definition of <code class="inline-code">&lt;digit&gt;</code> and we are finished parsing. 735 is three digits.</li>
+</ol>
+
+<p>The next two rules are more complicated, but they are mutually recursive and so must be introduced together.</p>
+
+<div class="code-block">{% highlight text %}<compression> ::= <letter><compression> | <block><compression> | ""
+<block> ::= <number>"("<compression>")"{% endhighlight %}</div>
+
+<p>Though more complicated than the definition of <code class="inline-code">&lt;number&gt;</code>, these follow the same basic principles. A <code class="inline-code">&lt;compression&gt;</code> can be a <code class="inline-code">&lt;letter&gt;</code> followed by another compressed string, a <code class="inline-code">&lt;block&gt;</code> followed by another compressed string, or the empty string. A <code class="inline-code">&lt;block&gt;</code> is a <code class="inline-code">&lt;number&gt;</code> followed by an open parenthesis, then a compressed string (which we just defined), and finally a close parenthesis.</p>
+
+<p>Here is the full grammar:</p>
+
+<div class="code-block">{% highlight text %}<compression> ::= <letter><compression> | <block><compression> | ""
+<letter> ::= [A-Za-z]
+<block> ::= <number>"("<compression>")"
+<number> ::= <digit><number> | <digit>
+<digit> ::= [0-9]{% endhighlight %}</div>
+
+<p>Try parsing the following strings from the definition of <code class="inline-code">&lt;compression&gt; </code>!</p>
+
+<ol>
+  <li>"a"</li>
+
+  <li>"ab"</li>
+
+  <li>"13(x)"</li>
+
+  <li>"2(x)3(y)"</li>
+
+  <li>"2(m3(n))"</li>
+
+  <li>"ab4(x5(y)z)2(mn)"</li>
+</ol>
+
+<p>Let's walk through the last example in detail. Each line is the result of applying one definition to the string and we already know that we start with a <code class="inline-code">&lt;compression&gt;</code></p>
+
+<ul>
+  <li>"ab4(x5(y)z)2(mn)" is a <code class="inline-code">&lt;compression&gt;</code></li>
+
+  <li>"a" is a <code class="inline-code">&lt;letter&gt;</code> and "b4(x5(y)z)2(mn)" is a <code class="inline-code">&lt;compression&gt;</code></li>
+
+  <li>"b" is a <code class="inline-code">&lt;letter&gt;</code> and "4(x5(y)z)2(mn)" is a <code class="inline-code">&lt;compression&gt;</code></li>
+
+  <li>"4(x5(y)z)" is a <code class="inline-code">&lt;block&gt;</code> and "2(mn)" is a <code class="inline-code">&lt;compression&gt;</code></li>
+
+  <li>"2(mn)" is a <code class="inline-code">&lt;block&gt;</code></li>
+</ul>
+
+<p>We can continue to break down the string "4(x5(y)z)" that we found:</p>
+
+<ul>
+  <li>"4(x5(y)z)" is a <code class="inline-code">&lt;block&gt;</code></li>
+
+  <li>"4" is a <code class="inline-code">&lt;number&gt;</code>, "(" is an open parenthesis, "x5(y)z" is a <code class="inline-code">&lt;compression&gt;</code>, and ")" is a close parenthesis</li>
+</ul>
+
+<p>And we could continue to break down the string "x5(y)z" we found in the last step, but I'll leave that as an
+exercise to the (inhumanly) diligent reader.</p>
+
+<p>Of course, just understanding the structure of a given string isn't enough. We also need to evaluate it to get the final decompressed string. In the examples above, this is what we'd like the output of our <code class="inline-code">decompress</code> function to be:</p>
+
+<ol>
+  <li>"a"</li>
+
+  <li>"ab"</li>
+
+  <li>"xxxxxxxxxxxxx"</li>
+
+  <li>"xxyyy"</li>
+
+  <li>"mnnnmnnn"</li>
+
+  <li>"abxyyyyyzxyyyyyzxyyyyyzxyyyyyzmnmn"</li>
+</ol>
+
+<p>We are finally at the point where we can start writing code. For the sake of my personal erudition I decided to use a neat little Python library called <a href="https://pythonhosted.org/parsec/">Parsec</a>. It provides a selection of <a href="https://en.wikipedia.org/wiki/Parser_combinator">parser combinators</a> that ease the development of bespoke parsers.</p>
+
+<p>Let's again start simply. How do we parse a letter?</p>
+
+<div class="code-block">{% highlight python %}import parsec
+parsec.letter().parse("a") # returns "a"
+parsec.letter().parse("1") # throws an exception{% endhighlight %}</div>
+
+<p>Neat. And a digit?</p>
+
+<div class="code-block">{% highlight python %}parsec.digit().parse("1") # returns "1"
+parsec.digit().parse(")") # throws an exception{% endhighlight %}</div>
+
+<p>Okay, those are easy. What about parsing a number, which can have many digits?</p>
+
+<div class="code-block">{% highlight python %}parsec.many1(parsec.digit()).parse("123") # returns ["1", "2", "3"]
+parsec.many1(parsec.digit()).parse("3a4") # throws an exception{% endhighlight %}</div>
+
+<p>The <code class="inline-code">parsec.many1</code> function accepts a parser as an argument and returns another parser that uses the argument one to many times. However, the output isn't quite what we want. We don't want a list of strings of digits, we want a real integer. We can write an <code class="inline-code">_evaluate_number</code> function to do this:</p>
+
+<div class="code-block">{% highlight python %}from typing import *
+
+def _evaluate_number(parsed_number: List[str]) -> int:
+    return int("".join(parsed_number)){% endhighlight %}</div>
+
+<p>Given a list of strings, the <code class="inline-code">_evaluate_number</code> function concatenates them and casts the result to an integer. Let's combine our parser and evaluator:</p>
+
+<div class="code-block">{% highlight python %}def _number() -> parsec.Parser():
+    return parsec.many1(parsec.digit()).parsecmap(_evaluate_number)
+
+_number().parse("543") # returns 543{% endhighlight %}</div>
+
+<p>To simplify things, let's assume that we have a function that provides a <code class="inline-code">&lt;block&gt;</code> parser:</p>
+
+<div class="code-block">{% highlight python %}def _block() -> parsec.Parser:
+    # We'll implement this soon
+    pass{% endhighlight %}</div>
+
+<p>Let's use it to write a <code class="inline-code">&lt;compression&gt;</code> parser:</p>
+
+<div class="code-block">{% highlight python %}def _compression() -> parsec.Parser:
+    return parsec.many(parsec.letter() ^ _block()){% endhighlight %}</div>
+
+<p>The <code class="inline-code">^</code> operator takes two parsers and returns a new parser that, when given input, tries the parser on the left and, if that fails, tries the parser on the right. The <code class="inline-code">parsec.many</code> function is almost identical to the <code class="inline-code">parsec.many1</code> function, except that <code class="inline-code">parsec.many1</code> must use its parser at least once while <code class="inline-code">parsec.many</code> can use its parser zero times. So, in literate English, the <code class="inline-code">_compression</code> function returns a parser that matches either a letter or a block zero or more times.</p>
+
+<p>Now we can return to the definition of the block parser. Let's try the obvious definition:</p>
+
+<div class="code-block">{% highlight python %}def _block() -> parsec.Parser:
+    return _number() + (
+        parsec.string("(") >> _compression() << parsec.string(")")
+    ){% endhighlight %}</div>
+
+<p>There's a lot going on here, so let's examine each part. The <code class="inline-code">+</code> operator combines two parsers. First it runs the parser on the left side of the operator, then it runs the parser on the right side of the operator, and last it returns the results of both parsers. The <code class="inline-code">&gt;&gt;</code> operator takes two parsers and discards the result of the parser on the left side of the operator. Similarly, the <code class="inline-code">&lt;&lt;</code> operator takes two parsers and discards the result of the parser on the right side of the operator. So <code class="inline-code">parsec.string("(") &gt;&gt; _compression() &lt;&lt; parsec.string(")")</code> is a parser that matches an open parenthesis, a <code class="inline-code">&lt;compression&gt;</code>, and a close parenthesis but only retains the output of the <code class="inline-code">_compression</code> parser, discarding the parentheses. Thus the entire <code class="inline-code">_block</code> function returns a parser that parses a <code class="inline-code">&lt;number&gt;</code> and a <code class="inline-code">&lt;compression&gt;</code>.</p>
+
+<p>Unfortunately, the naive definition doesn't work because it recurses forever. Python is an <a href="https://en.wikipedia.org/wiki/Eager_evaluation">eagerly evaluated</a> language, so when we invoke the <code class="inline-code">_compression</code> function, it calls the <code class="inline-code">_block</code> function which calls the <code class="inline-code">_compression</code> function which calls the <code class="inline-code">_block</code> function which calls the <code class="inline-code">_compression</code> function...</p>
+
+<p>We can get around this by manually making Python lazy:</p>
+
+<div class="code-block">{% highlight python %}def _block() -> parsec.Parser:
+    @parsec.Parser
+    def parse(text, index) -> Tuple[int, List[str]]:
+        p = (
+            _number() + (
+                parsec.string("(") >> _compression() << parsec.string(")")
+            )
+        )
+        return p(text, index)
+
+    return parse{% endhighlight %}</div>
+
+<p>Now the <code class="inline-code">_block</code> function returns another function (which the <code class="inline-code">@parsec.Parser</code> annotation turns into a fully-fledged parser) that parses a <code class="inline-code">&lt;block&gt;</code> but, crucially, does <i>not</i> invoke that function, meaning that <code class="inline-code">_compression</code> won't be called until it's needed.</p>
+
+<p>Now all that remains is to write accompanying evaluate functions:</p>
+
+<div class="code-block">{% highlight python %}def _evaluate_block(parsed_block: Tuple[int, List[str]]) -> str:
+    num_repetitions, letters = parsed_block
+    return "".join(num_repetitions * letters)
+
+def _evaluate_compression(parsed_compression: List[str]) -> str:
+    return "".join(parsed_compression){% endhighlight %}</div>
+
+<p>The <code class="inline-code">_evaluate_block</code> function takes a tuple whose first element is the output of the <code class="inline-code">_number</code> parser and whose second element is the output of the <code class="inline-code">_compression</code> parser. It then repeats the output of the <code class="inline-code">_compression</code> parser as many times as indicated by the <code class="inline-code">_number</code> parser.</p>
+
+<p>The <code class="inline-code">_evaluate_compression</code> function takes a list of strings that are the outputs of many invocations of the <code class="inline-code">parsec.letter</code> parser and our <code class="inline-code">_block</code> parser, concatenates the strings, and returns the result.</p>
+
+<p>We can plug the evaluate functions into our parsers with <code class="inline-code">parsecmap</code>:</p>
+
+<div class="code-block">{% highlight python %}def _block() -> parsec.Parser:
+    @parsec.Parser
+    def parse(text, index) -> str:
+        p = (
+            _number() + (
+                parsec.string("(") >> _compression() << parsec.string(")")
+            )
+        ).parsecmap(_evaluate_block)
+        return p(text, index)
+
+    return parse
+
+def _compression() -> parsec.Parser:
+    return parsec.many(
+        parsec.letter() ^ _block()
+    ).parsecmap(_evaluate_compression){% endhighlight %}</div>
+
+<p>Et voilà, we have a fully fledged parser! We can write a <code class="inline-code">decompress</code> function which satisfies the definition given in the original problem:</p>
+
+<div class="code-block">{% highlight python %}def decompress(text: str) -> str:
+    return _compression().parse_strict(text)
+
+decompress("abc") # returns "abc"
+decompress("2(xy)") # returns "xyxy"
+decompress("a2(x3(y)z)b") # returns "axyyyzxyyyzb"{% endhighlight %}</div>
+
+<p>Here is the full code:</p>
+
+<div class="code-block">{% highlight python %}def decompress(text: str) -> str:
+    return _compression().parse_strict(text)
+
+def _compression() -> parsec.Parser:
+    return parsec.many(
+        parsec.letter() ^ _block()
+    ).parsecmap(_evaluate_compression)
+
+def _evaluate_compression(parsed_compression: List[str]) -> str:
+    return "".join(parsed_compression)
+
+def _block() -> parsec.Parser:
+    @parsec.Parser
+    def parse(text, index) -> str:
+        p = (
+            _number() + (
+                parsec.string("(") >> _compression() << parsec.string(")")
+            )
+        ).parsecmap(_evaluate_block)
+        return p(text, index)
+
+    return parse
+
+def _evaluate_block(parsed_block: Tuple[int, List[str]]) -> str:
+    num_repetitions, letters = parsed_block
+    return "".join(num_repetitions * letters)
+
+def _number() -> parsec.Parser:
+    return parsec.many1(parsec.digit()).parsecmap(_evaluate_number)
+
+def _evaluate_number(parsed_number: List[str]) -> int:
+    return int("".join(parsed_number)){% endhighlight %}</div>
+
+<p>Note that you should <i>definitely</i> not use this code in any kind of production system; there are better ways to compress data and this code is vulnerable to things like the <a href="https://en.wikipedia.org/wiki/Billion_laughs_attack">billion laughs attack</a>. But it was fun to learn more about parsers and to slay some of my closeted dragons.</p>
+
+<p>Until next time, adieu.</p>

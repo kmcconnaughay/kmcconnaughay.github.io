@@ -1,0 +1,21 @@
+@import "colors";
+@import "fonts";
+
+nav {
+    background-color: $gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav a {
+    color: $soft-white;
+    font-family: $default-font-family;
+    font-size: $medium-font-size;
+    margin-right: 1rem;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: $transparent-white;
+}

@@ -1,0 +1,20 @@
+@import "colors";
+
+.small-square-icon {
+    width: 4rem;
+    height: 4rem;
+}
+
+.large-square-icon {
+    width: 6rem;
+    height: 6rem;
+}
+
+#wrench {
+    background-color: $teal;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
