@@ -20,7 +20,7 @@
 
 title: Knowing Less about More
 description: >- # this means to ignore newlines until "baseurl:"
-  An intermittent journey into sundry rabbit holes.
+  An intermittent journey into sundry rabbit holes
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://kmcconnaughay.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  kmcconnaughay
