@@ -1,4 +1,4 @@
-@import "colors";
+@use "colors";
 
 .small-square-icon {
     width: 4rem;
@@ -11,7 +11,7 @@
 }
 
 #wrench {
-    background-color: $teal;
+    background-color: colors.$teal;
     display: block;
     margin-left: auto;
     margin-right: auto;

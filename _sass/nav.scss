@@ -1,21 +1,21 @@
-@import "colors";
-@import "fonts";
+@use "colors";
+@use "fonts";
 
 nav {
-    background-color: $gray;
+    background-color: colors.$gray;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 nav a {
-    color: $soft-white;
-    font-family: $default-font-family;
-    font-size: $medium-font-size;
+    color: colors.$soft-white;
+    font-family: fonts.$default-font-family;
+    font-size: fonts.$medium-font-size;
     margin-right: 1rem;
     text-decoration: none;
 }
 
 nav a:hover {
-    background-color: $transparent-white;
+    background-color: colors.$transparent-white;
 }

@@ -1,6 +1,6 @@
-@import "colors";
+@use "colors";
 
 body {
-    background-color: $dark-gray;
+    background-color: colors.$dark-gray;
     margin: 0rem;
 }
