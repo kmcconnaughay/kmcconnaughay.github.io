@@ -1,88 +1,46 @@
 @use "colors";
 @use "fonts";
 
-$tile-margin: 1rem;
-$tile-max-width: 60rem;
 
-.tile {
-    background-color: colors.$gray;
-    border-style: solid;
-    border-width: 1px;
-    border-color: colors.$teal;
-    margin: $tile-margin;
-    max-width: $tile-max-width;
-    min-height: 12.5rem;
+.post-title {
+  font-size: fonts.$large-font-size;
+  text-align: center;
 }
 
-.tile a {
-    color: colors.$soft-white;
-}
-
-.tile a:hover {
-    background-color: colors.$transparent-white;
+.post-date {
+  font-size: fonts.$small-font-size;
+  text-align: center;
 }
 
 .post-list {
     list-style-type: none;
+    display: flex;
+    flex-direction: column;
 }
 
-.post-title {
+.post-list li {
     color: colors.$soft-white;
-    font-family: monospace;
-    font-size: fonts.$large-font-size;
-    text-align: center;
-}
-
-.post-subtitle {
-    color: colors.$soft-white;
-    font-family: monospace;
-    font-size: fonts.$small-font-size;
-    text-align: center;
+    font-size: fonts.$medium-font-size;
+    list-style: none;
+    gap: 0;
+    padding: 0;
 }
 
 .post-content {
-    color: colors.$soft-white;
-    font-family: monospace;
-    font-size: fonts.$medium-font-size;
-    line-height: 1.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    text-align: justify;
+  font-size: fonts.$medium-font-size;
+  line-height: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
-.narrow-screen-only {
-    display: block;
+code {
+  border: 1px solid colors.$orange;
+  padding: 0 0.25rem;
 }
 
-@media screen and (min-width: $tile-max-width + 2 * $tile-margin) {
-    .narrow-screen-only {
-        display: none;
-    }
-
-    .tile {
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
-.inline-code {
-    border-style: solid;
-    border-width: 1px;
-    border-color: colors.$orange;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-    margin-left: 0.125rem;
-    margin-right: 0.125rem;
-}
-
-.code-block {
-    display: block;
-    border-style: solid;
-    border-width: 1px;
-    border-color: colors.$orange;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-left: 0rem;
-    margin-right: 0rem;
-    overflow-x: auto;
+pre code {
+  display: block;
+  margin: 1rem 0;
+  padding: 1rem 2rem;
+  overflow-x: auto;
 }

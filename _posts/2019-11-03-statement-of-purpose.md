@@ -2,6 +2,7 @@
 layout: post
 title: Statement of Purpose
 ---
+
 Before making this website, I felt obliged to consider its utility. There are millions of blogs dedicated to sundry subjects; many of them are written by subject matter experts who know more about their respective fields than I could ever hope to learn. Further, even if I did have unique knowledge to offer others, I have no desire to market my blog. It thus seems unlikely that more than a few dozen people will ever read it, and I imagine that most of them will be family and close friends.
 
 Perhaps this explains my prior reluctance to make a personal website. My time is finite and to spend it on this endeavor seemed wasteful.

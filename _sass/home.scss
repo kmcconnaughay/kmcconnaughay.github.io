@@ -1,0 +1,11 @@
+@use "fonts";
+
+.post-list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-item {
+  font-size: fonts.$medium-font-size;
+}

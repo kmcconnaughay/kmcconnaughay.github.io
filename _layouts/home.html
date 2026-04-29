@@ -1,21 +1,22 @@
 ---
 layout: default
 ---
+
 <div class="tile">
-    <header>
-        <h1 class="post-title">{{ site.title }}</h1>
-        <p class="post-subtitle">{{ site.description }}</p>
-    </header>
-    <ul class="post-list">
-      {%- for post in site.posts -%}
-      <li>
-        <h3 class="post-content">
-          <span>{{ post.date | date: '%F' }}:</span>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-      </li>
-      {%- endfor -%}
-    </ul>
+  <header>
+    <h1>{{ site.title }}</h1>
+    <p>{{ site.description }}</p>
+  </header>
+  <ul class="post-list">
+    {%- for post in site.posts -%}
+    <li>
+      <h3 class="post-item">
+        <time datetime="{{ post.date | date: '%Y-%m-%d' }}">
+          {{ post.date | date: '%Y-%m-%d' }}:
+        </time>
+        <a href="{{ post.url | relative_url }}"> {{ post.title | escape }} </a>
+      </h3>
+    </li>
+    {%- endfor -%}
+  </ul>
 </div>

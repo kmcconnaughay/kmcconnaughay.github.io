@@ -1,6 +1,31 @@
 @use "colors";
 
 body {
-    background-color: colors.$dark-gray;
-    margin: 0rem;
+  color: colors.$soft-white;
+  font-family: monospace;
+  background-color: colors.$dark-gray;
+  margin: 0;
+}
+
+header {
+  text-align: center;
+}
+
+a {
+  color: colors.$soft-white;
+}
+
+a:hover {
+  background-color: colors.$transparent-white;
+}
+
+.tile {
+  background-color: colors.$gray;
+  border: 1px solid colors.$teal;
+  box-sizing: border-box;
+  margin-top: 1rem;
+  margin-inline: auto;
+  width: calc(100% - 2rem);
+  max-width: 60rem;
+  min-height: 12.5rem;
 }

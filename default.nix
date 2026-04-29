@@ -9,5 +9,11 @@ let env = bundlerEnv {
   };
 in stdenv.mkDerivation {
   name = "kmcconnaughay.github.io";
-  buildInputs = [env bundler ruby];
+  buildInputs = [
+    env
+    bundler
+    ruby
+    nodejs
+    nodePackages.prettier
+  ];
 }

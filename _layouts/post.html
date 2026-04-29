@@ -1,14 +1,13 @@
 ---
 layout: default
 ---
+
 <article class="tile">
   <header>
     <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-subtitle">
-        <time datetime="{{ page.date | date: '%F' }}">{{ page.date | date: '%F' }}</time>
-    </p>
+    <time class="post-date" datetime="{{ page.date | date: '%Y-%m-%d' }}">
+      {{ page.date | date: '%Y-%m-%d' }}
+    </time>
   </header>
-  <section class="post-content">
-    {{ content }}
-  </section>
+  <section class="post-content">{{ content }}</section>
 </article>
